@@ -1,4 +1,10 @@
-let startDate = new Date(2026, 7, 8, 21, 50, 0);
+let startDate;
+try {
+  const saved = localStorage.getItem("startDate");
+  startDate = saved ? new Date(saved) : new Date(2026, 7, 8, 21, 50, 0);
+} catch (e) {
+  startDate = new Date(2026, 7, 8, 21, 50, 0);
+}
 
 const monthNames = [
   "Jan",
@@ -81,6 +87,14 @@ function getMaxDate() {
     59,
     59,
   );
+}
+
+function saveStartDate() {
+  try {
+    localStorage.setItem("startDate", startDate.toISOString());
+  } catch (e) {
+    // ignore storage errors (e.g., privacy mode)
+  }
 }
 
 function getSelectElements(field) {
@@ -197,6 +211,7 @@ function populateDatePicker() {
   const maxDate = getMaxDate();
   const safeStartDate = startDate > maxDate ? maxDate : startDate;
   startDate = safeStartDate;
+  saveStartDate();
 
   const yearItems = [];
   for (let year = 2000; year <= maxDate.getFullYear(); year += 1) {
@@ -253,6 +268,7 @@ function updateStartDateFromPicker() {
   const finalDate = selectedDate > maxDate ? maxDate : selectedDate;
 
   startDate = finalDate;
+  saveStartDate();
   populateDatePicker();
   updateTimer();
 }
