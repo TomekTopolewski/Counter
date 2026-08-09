@@ -217,6 +217,7 @@ h1 {
   border-radius: 999px;
   font: inherit;
   cursor: pointer;
+  z-index: 40;
   transition:
     transform 0.2s ease,
     background 0.3s ease,
@@ -241,4 +242,62 @@ h1 {
   border-radius: 8px;
   background: var(--glow-bg);
   box-shadow: 0 0 10px rgba(192, 132, 252, 0.25);
+}
+
+/* Responsive tweaks for narrow / iPhone-width viewports */
+@media (max-width: 480px) {
+  body {
+    align-items: flex-start;
+    padding-top: 5.25rem;
+    height: auto;
+    min-height: 100vh;
+  }
+
+  .card {
+    width: calc(100% - 2rem);
+    padding: 1.25rem 1rem;
+    border-radius: 14px;
+    margin-top: 6rem;
+  }
+
+  .date-picker {
+    position: fixed;
+    top: 4rem;
+    left: 0.5rem;
+    right: 0.5rem;
+    transform: none;
+    gap: 0.5rem;
+    padding: 0.5rem;
+    border-radius: 12px;
+    z-index: 30;
+  }
+
+  .custom-select__trigger {
+    min-width: 56px;
+    padding: 0.4rem 0.5rem;
+    font-size: 0.95rem;
+  }
+
+  .date-field span {
+    font-size: 0.7rem;
+  }
+
+  .theme-toggle {
+    top: 0.5rem;
+    right: 0.5rem;
+    padding: 0.35rem 0.55rem;
+    font-size: 0.95rem;
+  }
+}
+
+@media (max-width: 360px) {
+  .custom-select__trigger {
+    min-width: 48px;
+    padding: 0.35rem 0.45rem;
+  }
+  .date-picker {
+    gap: 0.35rem;
+    padding: 0.4rem;
+    top: 3rem;
+  }
 }
