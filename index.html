@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Elapsed Time</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <button
+      id="themeToggle"
+      class="theme-toggle"
+      type="button"
+      aria-pressed="false"
+    >
+      🌙 Night Mode
+    </button>
+    <div class="date-picker" aria-label="Select a start date">
+      <label class="date-field">
+        <span>Day</span>
+        <div class="custom-select" data-field="day">
+          <button
+            id="daySelect"
+            class="custom-select__trigger"
+            type="button"
+          ></button>
+          <div
+            id="daySelectOptions"
+            class="custom-select__options"
+            role="listbox"
+          ></div>
+        </div>
+      </label>
+      <label class="date-field">
+        <span>Month</span>
+        <div class="custom-select" data-field="month">
+          <button
+            id="monthSelect"
+            class="custom-select__trigger"
+            type="button"
+          ></button>
+          <div
+            id="monthSelectOptions"
+            class="custom-select__options"
+            role="listbox"
+          ></div>
+        </div>
+      </label>
+      <label class="date-field">
+        <span>Year</span>
+        <div class="custom-select" data-field="year">
+          <button
+            id="yearSelect"
+            class="custom-select__trigger"
+            type="button"
+          ></button>
+          <div
+            id="yearSelectOptions"
+            class="custom-select__options"
+            role="listbox"
+          ></div>
+        </div>
+      </label>
+      <label class="date-field">
+        <span>Hour</span>
+        <div class="custom-select" data-field="hour">
+          <button
+            id="hourSelect"
+            class="custom-select__trigger"
+            type="button"
+          ></button>
+          <div
+            id="hourSelectOptions"
+            class="custom-select__options"
+            role="listbox"
+          ></div>
+        </div>
+      </label>
+      <label class="date-field">
+        <span>Minute</span>
+        <div class="custom-select" data-field="minute">
+          <button
+            id="minuteSelect"
+            class="custom-select__trigger"
+            type="button"
+          ></button>
+          <div
+            id="minuteSelectOptions"
+            class="custom-select__options"
+            role="listbox"
+          ></div>
+        </div>
+      </label>
+    </div>
+
+    <div class="card">
+      <h1>Elapsed Time</h1>
+      <p id="output">
+        <span class="glow">Loading...</span>
+      </p>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
