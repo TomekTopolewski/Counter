@@ -37,40 +37,19 @@ function updateTimer() {
   }
 }
 
-function updateThemeButton(isLightTheme) {
-  const themeToggle = document.getElementById("themeToggle");
-  if (!themeToggle) return;
+function applySystemTheme() {
+  const mediaQuery = window.matchMedia("(prefers-color-scheme: light)");
+  const isLightTheme = mediaQuery.matches;
 
-  themeToggle.textContent = isLightTheme ? "☀ Light Mode" : "🌙 Dark Mode";
-  themeToggle.setAttribute("aria-pressed", String(isLightTheme));
-}
-
-function applyTheme(isLightTheme) {
   document.body.classList.toggle("light-theme", isLightTheme);
-  updateThemeButton(isLightTheme);
+  document.documentElement.style.colorScheme = isLightTheme ? "light" : "dark";
 }
 
-function initializeTheme() {
-  const savedTheme = localStorage.getItem("theme");
-  const systemPrefersLight = window.matchMedia(
-    "(prefers-color-scheme: light)",
-  ).matches;
-  const shouldUseLightTheme = savedTheme
-    ? savedTheme === "light"
-    : systemPrefersLight;
+function setupSystemThemeListener() {
+  applySystemTheme();
 
-  applyTheme(shouldUseLightTheme);
-}
-
-function setupThemeToggle() {
-  const themeToggle = document.getElementById("themeToggle");
-  if (!themeToggle) return;
-
-  themeToggle.addEventListener("click", () => {
-    const isLightTheme = document.body.classList.toggle("light-theme");
-    localStorage.setItem("theme", isLightTheme ? "light" : "dark");
-    updateThemeButton(isLightTheme);
-  });
+  const mediaQuery = window.matchMedia("(prefers-color-scheme: light)");
+  mediaQuery.addEventListener("change", applySystemTheme);
 }
 
 function getDaysInMonth(year, month) {
@@ -295,18 +274,7 @@ function setupDatePicker() {
   });
 }
 
-function setupSystemThemeListener() {
-  const mediaQuery = window.matchMedia("(prefers-color-scheme: light)");
-
-  mediaQuery.addEventListener("change", (event) => {
-    if (localStorage.getItem("theme")) return;
-    applyTheme(event.matches);
-  });
-}
-
 setupSystemThemeListener();
-initializeTheme();
-setupThemeToggle();
 setupDatePicker();
 updateTimer();
 setInterval(updateTimer, 1000);

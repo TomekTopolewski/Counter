@@ -11,6 +11,21 @@
   --glow-bg: rgba(139, 92, 246, 0.16);
 }
 
+@media (prefers-color-scheme: light) {
+  :root {
+    --bg: #f7f4ff;
+    --bg-start: #f7ebff;
+    --panel: rgba(255, 255, 255, 0.88);
+    --text: #2b153f;
+    --accent: #7c3aed;
+    --accent-2: #5b21b6;
+    --border: rgba(124, 58, 237, 0.28);
+    --shadow: rgba(124, 58, 237, 0.16);
+    --shadow-strong: rgba(124, 58, 237, 0.3);
+    --glow-bg: rgba(124, 58, 237, 0.12);
+  }
+}
+
 body.light-theme {
   --bg: #f7f4ff;
   --bg-start: #f7ebff;
@@ -29,7 +44,7 @@ body.light-theme {
 }
 
 html {
-  background-color: #08040f;
+  background-color: #24113f;
 }
 
 body {
@@ -70,30 +85,16 @@ body::-webkit-scrollbar-thumb {
   padding: 2.5rem 3rem;
   border-radius: 20px;
   box-shadow:
-    0 0 25px var(--shadow),
-    inset 0 0 20px rgba(139, 92, 246, 0.16);
+    0 0 24px var(--shadow-strong),
+    inset 0 0 18px rgba(139, 92, 246, 0.18);
   text-align: center;
   backdrop-filter: blur(10px);
   width: 460px;
   max-width: 90vw;
-  animation: cardGlow 3.2s cubic-bezier(0.22, 1, 0.36, 1) infinite alternate;
   transition:
     background 0.4s ease,
     color 0.4s ease,
     border-color 0.4s ease;
-}
-
-@keyframes cardGlow {
-  from {
-    box-shadow:
-      0 0 18px var(--shadow),
-      inset 0 0 16px rgba(139, 92, 246, 0.14);
-  }
-  to {
-    box-shadow:
-      0 0 34px var(--shadow-strong),
-      inset 0 0 24px rgba(139, 92, 246, 0.24);
-  }
 }
 
 h1 {
@@ -210,28 +211,6 @@ h1 {
   cursor: not-allowed;
 }
 
-.theme-toggle {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-  border: 1px solid var(--border);
-  background: var(--glow-bg);
-  color: var(--text);
-  padding: 0.5rem 0.8rem;
-  border-radius: 999px;
-  font: inherit;
-  cursor: pointer;
-  z-index: 40;
-  transition:
-    transform 0.2s ease,
-    background 0.3s ease,
-    color 0.3s ease;
-}
-
-.theme-toggle:hover {
-  transform: translateY(-1px);
-}
-
 #output {
   margin: 0;
   font-size: 1.15rem;
@@ -284,13 +263,6 @@ h1 {
 
   .date-field span {
     font-size: 0.7rem;
-  }
-
-  .theme-toggle {
-    top: 0.5rem;
-    right: 0.5rem;
-    padding: 0.35rem 0.55rem;
-    font-size: 0.95rem;
   }
 }
 
