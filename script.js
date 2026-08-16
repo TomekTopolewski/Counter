@@ -1,3 +1,5 @@
+"use strict";
+
 let startDate;
 try {
   const saved = localStorage.getItem("startDate");
@@ -6,20 +8,9 @@ try {
   startDate = new Date(2026, 7, 16, 14, 40, 0);
 }
 
-const monthNames = [
-  "Jan",
-  "Feb",
-  "Mar",
-  "Apr",
-  "May",
-  "Jun",
-  "Jul",
-  "Aug",
-  "Sep",
-  "Oct",
-  "Nov",
-  "Dec",
-];
+const monthNames = Array.from({ length: 12 }, (_, i) =>
+  new Date(2000, i).toLocaleString("en-US", { month: "short" }),
+);
 
 function updateTimer() {
   const now = new Date();
@@ -30,26 +21,25 @@ function updateTimer() {
   const minutes = Math.floor(totalMinutes % 60);
   const seconds = Math.floor((diffMs % 60000) / 1000);
   const message = `${days} days, ${hours} hours, ${minutes} minutes, ${seconds} seconds`;
-
-  if (typeof document !== "undefined") {
-    const outputElement = document.getElementById("output");
-    outputElement && (outputElement.textContent = message);
-  }
-}
-
-function applySystemTheme() {
-  const mediaQuery = window.matchMedia("(prefers-color-scheme: light)");
-  const isLightTheme = mediaQuery.matches;
-
-  document.body.classList.toggle("light-theme", isLightTheme);
-  document.documentElement.style.colorScheme = isLightTheme ? "light" : "dark";
+  const outputElement = document.getElementById("output");
+  outputElement && (outputElement.textContent = message);
 }
 
 function setupSystemThemeListener() {
-  applySystemTheme();
+  const updateTheme = () => {
+    const isLightTheme = window.matchMedia(
+      "(prefers-color-scheme: light)",
+    ).matches;
+    document.body.classList.toggle("light-theme", isLightTheme);
+    document.documentElement.style.colorScheme = isLightTheme
+      ? "light"
+      : "dark";
+  };
 
-  const mediaQuery = window.matchMedia("(prefers-color-scheme: light)");
-  mediaQuery.addEventListener("change", applySystemTheme);
+  updateTheme();
+  window
+    .matchMedia("(prefers-color-scheme: light)")
+    .addEventListener("change", updateTheme);
 }
 
 function getDaysInMonth(year, month) {
@@ -71,9 +61,7 @@ function getMaxDate() {
 function saveStartDate() {
   try {
     localStorage.setItem("startDate", startDate.toISOString());
-  } catch (e) {
-    // ignore storage errors (e.g., privacy mode)
-  }
+  } catch (e) {}
 }
 
 function getSelectElements(field) {
@@ -91,6 +79,23 @@ function closeAllCustomSelects() {
   });
 }
 
+function createOptionButton(item, selectedItem, trigger, options) {
+  const button = document.createElement("button");
+  button.type = "button";
+  button.className = "custom-select__option";
+  button.textContent = item.label;
+  button.dataset.value = item.value;
+  if (item.disabled) button.disabled = true;
+  if (selectedItem?.value === item.value) button.classList.add("is-selected");
+  button.addEventListener("click", () => {
+    trigger.dataset.value = item.value;
+    trigger.textContent = item.label;
+    closeAllCustomSelects();
+    updateStartDateFromPicker();
+  });
+  return button;
+}
+
 function renderCustomOptions(field, items, selectedValue) {
   const { trigger, options } = getSelectElements(field);
   if (!trigger || !options) return;
@@ -100,24 +105,9 @@ function renderCustomOptions(field, items, selectedValue) {
   options.innerHTML = "";
 
   items.forEach((item) => {
-    const optionButton = document.createElement("button");
-    optionButton.type = "button";
-    optionButton.className = "custom-select__option";
-    optionButton.textContent = item.label;
-    optionButton.dataset.value = item.value;
-    if (item.disabled) {
-      optionButton.disabled = true;
-    }
-    if (selectedItem && item.value === selectedItem.value) {
-      optionButton.classList.add("is-selected");
-    }
-    optionButton.addEventListener("click", () => {
-      trigger.dataset.value = item.value;
-      trigger.textContent = item.label;
-      closeAllCustomSelects();
-      updateStartDateFromPicker();
-    });
-    options.appendChild(optionButton);
+    options.appendChild(
+      createOptionButton(item, selectedItem, trigger, options),
+    );
   });
 
   if (selectedItem) {
@@ -133,16 +123,11 @@ function populateDays(year, month, selectedDay = 1) {
     year === maxDate.getFullYear() && month === maxDate.getMonth();
   const maxDay = isCurrentMonth ? maxDate.getDate() : dayCount;
   const safeSelectedDay = Math.min(Number(selectedDay || 1), maxDay);
-  const items = [];
-
-  for (let day = 1; day <= dayCount; day += 1) {
-    items.push({
-      value: String(day),
-      label: String(day),
-      disabled: day > maxDay,
-    });
-  }
-
+  const items = Array.from({ length: dayCount }, (_, i) => ({
+    value: String(i + 1),
+    label: String(i + 1),
+    disabled: i + 1 > maxDay,
+  }));
   renderCustomOptions("day", items, String(safeSelectedDay));
 }
 
@@ -164,25 +149,18 @@ function populateTimeSelectors(
     isToday && safeHour === maxDate.getHours() ? maxDate.getMinutes() : 59;
   const safeMinute = Math.min(Number(selectedMinute || 0), maxMinute);
 
-  const hourItems = [];
-  for (let hour = 0; hour < 24; hour += 1) {
-    hourItems.push({
-      value: String(hour),
-      label: String(hour).padStart(2, "0"),
-      disabled: isToday && hour > maxHour,
-    });
-  }
+  const hourItems = Array.from({ length: 24 }, (_, i) => ({
+    value: String(i),
+    label: String(i).padStart(2, "0"),
+    disabled: isToday && i > maxHour,
+  }));
   renderCustomOptions("hour", hourItems, String(safeHour));
 
-  const minuteItems = [];
-  for (let minute = 0; minute < 60; minute += 1) {
-    minuteItems.push({
-      value: String(minute),
-      label: String(minute).padStart(2, "0"),
-      disabled:
-        isToday && safeHour === maxDate.getHours() && minute > maxMinute,
-    });
-  }
+  const minuteItems = Array.from({ length: 60 }, (_, i) => ({
+    value: String(i),
+    label: String(i).padStart(2, "0"),
+    disabled: isToday && safeHour === maxDate.getHours() && i > maxMinute,
+  }));
   renderCustomOptions("minute", minuteItems, String(safeMinute));
 }
 
@@ -192,25 +170,20 @@ function populateDatePicker() {
   startDate = safeStartDate;
   saveStartDate();
 
-  const yearItems = [];
-  for (let year = 2000; year <= maxDate.getFullYear(); year += 1) {
-    yearItems.push({
-      value: String(year),
-      label: String(year),
-    });
-  }
+  const yearCount = maxDate.getFullYear() - 2000 + 1;
+  const yearItems = Array.from({ length: yearCount }, (_, i) => ({
+    value: String(2000 + i),
+    label: String(2000 + i),
+  }));
   renderCustomOptions("year", yearItems, String(safeStartDate.getFullYear()));
 
-  const monthItems = [];
-  monthNames.forEach((name, index) => {
-    monthItems.push({
-      value: String(index),
-      label: name,
-      disabled:
-        safeStartDate.getFullYear() === maxDate.getFullYear() &&
-        index > maxDate.getMonth(),
-    });
-  });
+  const monthItems = monthNames.map((name, index) => ({
+    value: String(index),
+    label: name,
+    disabled:
+      safeStartDate.getFullYear() === maxDate.getFullYear() &&
+      index > maxDate.getMonth(),
+  }));
   renderCustomOptions("month", monthItems, String(safeStartDate.getMonth()));
 
   populateDays(
