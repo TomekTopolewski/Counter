@@ -1,9 +1,9 @@
 let startDate;
 try {
   const saved = localStorage.getItem("startDate");
-  startDate = saved ? new Date(saved) : new Date(2026, 7, 8, 21, 50, 0);
+  startDate = saved ? new Date(saved) : new Date(2026, 7, 15, 22, 20, 0);
 } catch (e) {
-  startDate = new Date(2026, 7, 8, 21, 50, 0);
+  startDate = new Date(2026, 7, 15, 22, 20, 0);
 }
 
 const monthNames = [
