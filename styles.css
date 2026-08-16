@@ -1,10 +1,8 @@
 :root {
-  --bg: #08040f;
   --bg-start: #24113f;
   --panel: rgba(25, 10, 45, 0.92);
   --text: #f6ebff;
   --accent: #c084fc;
-  --accent-2: #8b5cf6;
   --border: rgba(192, 132, 252, 0.35);
   --shadow: rgba(192, 132, 252, 0.22);
   --shadow-strong: rgba(192, 132, 252, 0.38);
@@ -13,12 +11,10 @@
 
 @media (prefers-color-scheme: light) {
   :root {
-    --bg: #f7f4ff;
     --bg-start: #f7ebff;
     --panel: rgba(255, 255, 255, 0.88);
     --text: #2b153f;
     --accent: #7c3aed;
-    --accent-2: #5b21b6;
     --border: rgba(124, 58, 237, 0.28);
     --shadow: rgba(124, 58, 237, 0.16);
     --shadow-strong: rgba(124, 58, 237, 0.3);
@@ -27,12 +23,10 @@
 }
 
 body.light-theme {
-  --bg: #f7f4ff;
   --bg-start: #f7ebff;
   --panel: rgba(255, 255, 255, 0.88);
   --text: #2b153f;
   --accent: #7c3aed;
-  --accent-2: #5b21b6;
   --border: rgba(124, 58, 237, 0.28);
   --shadow: rgba(124, 58, 237, 0.16);
   --shadow-strong: rgba(124, 58, 237, 0.3);
@@ -40,22 +34,18 @@ body.light-theme {
 }
 
 * {
-  box-sizing: border-box;
-}
-
-html {
-  background-color: #24113f;
+  margin: 0;
 }
 
 body {
-  position: relative;
-  font-family: "Orbitron", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  font-family: sans-serif;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  justify-content: space-evenly;
   align-items: center;
-  height: 100vh;
-  margin: 0;
-  background: radial-gradient(circle at top, var(--bg-start), var(--bg));
+  width: 100vw;
+  height: 60vh;
+  background: var(--bg-start);
   color: var(--text);
   transition:
     background 0.4s ease,
@@ -64,33 +54,22 @@ body {
   scrollbar-width: thin;
 }
 
-body::-webkit-scrollbar {
-  width: 8px;
-}
-
-body::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-body::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, var(--accent), var(--accent-2));
-  border-radius: 999px;
-  border: 2px solid transparent;
-  background-clip: padding-box;
-}
-
 .card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
   background: var(--panel);
   border: 1px solid var(--border);
-  padding: 2.5rem 3rem;
-  border-radius: 20px;
+  border-radius: 12px;
   box-shadow:
     0 0 24px var(--shadow-strong),
     inset 0 0 18px rgba(139, 92, 246, 0.18);
-  text-align: center;
   backdrop-filter: blur(10px);
-  width: 460px;
-  max-width: 90vw;
+  width: 32rem;
+  height: 6rem;
+  margin: 1rem;
+  padding: 1.25rem 1rem;
   transition:
     background 0.4s ease,
     color 0.4s ease,
@@ -98,8 +77,7 @@ body::-webkit-scrollbar-thumb {
 }
 
 h1 {
-  margin: 0 0 1rem;
-  font-size: 2.2rem;
+  font-size: 2rem;
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--accent);
@@ -107,21 +85,18 @@ h1 {
 }
 
 .date-picker {
-  position: absolute;
-  top: 1rem;
-  left: 50%;
-  transform: translateX(-50%);
+  width: 32rem;
   display: flex;
-  justify-content: center;
-  gap: 0.75rem;
+  justify-content: space-evenly;
+  margin: 1rem;
   flex-wrap: wrap;
-  margin-bottom: 1rem;
-  padding: 0.75rem 1rem;
+  padding: 1.25rem 1rem;
   border: 1px solid var(--border);
-  border-radius: 16px;
+  border-radius: 12px;
   background: var(--panel);
   backdrop-filter: blur(10px);
   box-shadow: 0 0 18px var(--shadow);
+  z-index: 2;
 }
 
 .date-field span {
@@ -149,7 +124,6 @@ h1 {
   border-radius: 10px;
   background: rgba(255, 255, 255, 0.08);
   color: var(--text);
-  font: inherit;
   text-align: left;
   cursor: pointer;
 }
@@ -171,19 +145,6 @@ h1 {
   box-shadow: 0 10px 24px rgba(0, 0, 0, 0.2);
   scrollbar-color: var(--accent) transparent;
   scrollbar-width: thin;
-}
-
-.custom-select__options::-webkit-scrollbar {
-  width: 7px;
-}
-
-.custom-select__options::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.custom-select__options::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, var(--accent), var(--accent-2));
-  border-radius: 999px;
 }
 
 .custom-select.is-open .custom-select__options {
@@ -229,30 +190,12 @@ h1 {
 
 /* Responsive tweaks for narrow / iPhone-width viewports */
 @media (max-width: 480px) {
-  body {
-    align-items: flex-start;
-    padding-top: 5.25rem;
-    height: auto;
-    min-height: 100vh;
-  }
-
   .card {
-    width: calc(100% - 2rem);
-    padding: 1.25rem 1rem;
-    border-radius: 14px;
-    margin-top: 6rem;
+    width: calc(100% - 4rem);
   }
 
   .date-picker {
-    position: absolute;
-    top: 4rem;
-    left: 0.5rem;
-    right: 0.5rem;
-    transform: none;
-    gap: 0.5rem;
-    padding: 0.5rem;
-    border-radius: 12px;
-    z-index: 30;
+    width: calc(100% - 4rem);
   }
 
   .custom-select__trigger {
